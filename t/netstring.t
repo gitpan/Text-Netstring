@@ -1,6 +1,6 @@
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl test.pl'
-# $Id: netstring.t,v 1.4 2003/06/12 17:33:16 james Exp $
+# $Id: netstring.t,v 1.5 2003/06/19 17:09:16 james Exp $
 
 ######################### We start with some black magic to print on failure.
 
@@ -67,6 +67,10 @@ CASE: {
 	netstring_verify("0:bing-bang-a-bang,") &&
 			do { print "not ok 4\n"; last CASE };
 	netstring_verify("16:bing-bang-a-bang") &&
+			do { print "not ok 4\n"; last CASE };
+	netstring_verify("") &&
+			do { print "not ok 4\n"; last CASE };
+	netstring_verify("3:foo," , "4:foo,") &&
 			do { print "not ok 4\n"; last CASE };
 		
 	print "ok 4\n";
