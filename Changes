@@ -1,0 +1,7 @@
+Revision history for Perl extension Text::Netstring.
+$Id: Changes,v 1.3 2003/01/30 20:16:50 james Exp $
+
+0.01  Thu Jan 30 20:06:10 2003
+	First release; netstring_encode(), netstring_decode() and
+	 netstring_verify().
+	- original version; created by h2xs 1.19
