@@ -1,5 +1,10 @@
 Revision history for Perl extension Text::Netstring.
-$Id: Changes,v 1.4 2003/02/01 21:36:18 james Exp $
+$Id: Changes,v 1.6 2003/06/13 11:10:03 james Exp $
+
+0.03  Fri Jun 13 12:08:28 IST 2003
+	The functions now accept as an argument a list reference in
+	 addition to scalars and lists.
+	Add more tests.
 
 0.02  Sat Feb  1 21:31:07 GMT 2003
 	Add POD documentation for each function.

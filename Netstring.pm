@@ -12,7 +12,7 @@ require Exporter;
 # Please submit bug reports, patches and comments to the author.
 # Latest information at http://romana.now.ie/
 #
-# $Id: Netstring.pm,v 1.7 2003/02/01 21:30:34 james Exp $
+# $Id: Netstring.pm,v 1.8 2003/06/12 17:10:29 james Exp $
 #
 # See the Text::Netstring man page that was installed with this module for
 # information on how to use the module.
@@ -24,10 +24,15 @@ require Exporter;
 	netstring_encode netstring_decode netstring_verify
 );
 
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 
 sub netstring_encode {
+
+	# is argument a list reference?
+	if (scalar @_ == 1 and ref $_[0] eq "ARRAY") {
+		@_ = @{ $_[0] };
+	}
 
 	my @enc = map {
 
@@ -39,6 +44,11 @@ sub netstring_encode {
 }
 
 sub netstring_decode {
+
+	# is argument a list reference?
+	if (scalar @_ == 1 and ref $_[0] eq "ARRAY") {
+		@_ = @{ $_[0] };
+	}
 
 	my @dec = map {
 
@@ -55,6 +65,11 @@ sub netstring_decode {
 }
 
 sub netstring_verify {
+
+	# is argument a list reference?
+	if (scalar @_ == 1 and ref $_[0] eq "ARRAY") {
+		@_ = @{ $_[0] };
+	}
 
 	my @ver = map {
 
@@ -98,18 +113,20 @@ least, QMTP and QMQP.
 
 =item netstring_encode()
 
-Encode the supplied string, or list of strings, as a netstring.
+Encode the argument string, list of strings, or referenced list of
+string as a netstring.
 
-Supplying a scalar argument in a scalar context or list argument in list
-context does what you'd expect; encoding the scalar or each element of
-the list, as appropriate. Supplying a list argument in a scalar context,
-however, returns a single scalar which is the concatenation of each
-element of the list encoded as a netstring.
+Supplying a scalar argument in a scalar context or list or list
+reference argument in list context does what you'd expect; encoding the
+scalar or each element of the list, as appropriate. Supplying a list or
+list reference argument in a scalar context, however, returns a single
+scalar which is the concatenation of each element of the list encoded as
+a netstring.
 
 =item netstring_decode()
 
-Decode the supplied netstring, or list of netstrings, returning
-the I<interpretation> of each.
+Decode the argument netstring, list of netstrings, or referenced list of
+netstrings returning the I<interpretation> of each.
 
 The same context handling as for netstring_encode() applies.
 
@@ -121,6 +138,20 @@ Supplying a list argument in a scalar context will return a value for
 the first element of the list only.
 
 =back
+
+=head1 EXAMPLES
+
+ use Text::Netstring qw(netstring_encode);
+
+ @s = ("foo", "bar");
+ $t = netstring_encode( scalar netstring_encode(@s) );
+
+C<12:3:foo,3:bar,,> is the value of C<$t>
+
+ $s = ["5:whizz," , "4:bang,"];
+ $t = netstring_decode($s);
+
+C<whizzbang> is the value of C<$t>
 
 =head1 NOTES
 

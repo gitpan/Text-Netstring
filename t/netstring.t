@@ -1,13 +1,13 @@
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl test.pl'
-# $Id: netstring.t,v 1.3 2003/02/01 21:26:37 james Exp $
+# $Id: netstring.t,v 1.4 2003/06/12 17:33:16 james Exp $
 
 ######################### We start with some black magic to print on failure.
 
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..7\n"; }
+BEGIN { $| = 1; print "1..12\n"; }
 END {print "not ok 1\n" unless $loaded;}
 use Text::Netstring qw(netstring_encode netstring_decode netstring_verify);
 $loaded = 1;
@@ -20,6 +20,7 @@ print "ok 1\n";
 # of the test code):
 
 my $string;
+my @list;
 
 
 #
@@ -105,4 +106,65 @@ if (!$string) {
 	print "ok 7\n";
 } else {
 	print "not ok 7\n";
+}
+
+
+#
+# test 8; encode a list of strings
+# "foo" "baz" should become "3:foo," "3:baz,"
+#
+@list = netstring_encode("foo", "baz");
+if (scalar @list == 2 and $list[0] eq "3:foo," and $list[1] eq "3:baz,") {
+	print "ok 8\n";
+} else {
+	print "not ok 8\n";
+}
+
+#
+# test 9; decode a list of strings
+# result of above should become "foo" "baz" again
+#
+@list = netstring_decode(@list);
+if (scalar @list == 2 and $list[0] eq "foo" and $list[1] eq "baz") {
+	print "ok 9\n";
+} else {
+	print "not ok 9\n";
+}
+
+
+#
+# test 10; encode a list of strings in scalar context
+# "foo" "baz" should become "3:foo,3:baz,"
+#
+$string = netstring_encode("foo", "baz");
+if ($string eq "3:foo,3:baz,") {
+	print "ok 10\n";
+} else {
+	print "not ok 10\n";
+}
+
+
+#
+# test 11; encode a list reference of strings, in scalar context
+# "foo" "baz" should become "3:foo,3:baz,"
+#
+$string = ["foo", "baz"];	#anonymous reference
+$string = netstring_encode($string);
+if ($string eq "3:foo,3:baz,") {
+	print "ok 11\n";
+} else {
+	print "not ok 11\n";
+}
+
+
+#
+# test 12; encode a list reference of strings, in list context
+# "foo" "baz" should become "3:foo," "3:baz,"
+#
+$string = ["foo", "baz"];	#anonymous reference
+@list = netstring_encode($string);
+if (scalar @list == 2 and $list[0] eq "3:foo," and $list[1] eq "3:baz,") {
+	print "ok 12\n";
+} else {
+	print "not ok 12\n";
 }
