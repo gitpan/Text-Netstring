@@ -1,13 +1,13 @@
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl test.pl'
-# $Id: netstring.t,v 1.5 2003/06/19 17:09:16 james Exp $
+# $Id: netstring.t,v 1.6 2004/08/19 09:21:34 james Exp $
 
 ######################### We start with some black magic to print on failure.
 
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..12\n"; }
+BEGIN { $| = 1; print "1..15\n"; }
 END {print "not ok 1\n" unless $loaded;}
 use Text::Netstring qw(netstring_encode netstring_decode netstring_verify);
 $loaded = 1;
@@ -172,3 +172,40 @@ if (scalar @list == 2 and $list[0] eq "3:foo," and $list[1] eq "3:baz,") {
 } else {
 	print "not ok 12\n";
 }
+
+
+#
+# test 13; encode a string with newline into a netstring
+# bing-bang\na-bang  should become  16:bing-bang\na-bang,
+#
+$string = netstring_encode("bing-bang\na-bang");
+if ($string eq "16:bing-bang\na-bang,") {
+	print "ok 13\n";
+} else {
+	print "not ok 13\n";
+}
+
+
+#
+# test 14; verify a valid netstring
+# the result of above should verify as a netstring
+#
+if (netstring_verify($string)) {
+	print "ok 14\n";
+} else {
+	print "not ok 14\n";
+}
+
+
+#
+# test 15; decode a valid netstring
+# the result of 13 should decode as  bing-bang\na-bang
+#
+$string = netstring_decode($string);
+if ($string eq "bing-bang\na-bang") {
+	print "ok 15\n";
+} else {
+	print "not ok 15\n";
+}
+
+

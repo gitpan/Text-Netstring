@@ -1,5 +1,9 @@
 Revision history for Perl extension Text::Netstring.
-$Id: Changes,v 1.8 2003/06/24 17:22:06 james Exp $
+$Id: Changes,v 1.9 2004/08/19 09:24:56 james Exp $
+
+0.05  Thu 19 Aug 2004 10:21:54 IST
+	Fix a problem doing decode and verify on netstrings with
+	  embedded newlines. Thanks to Ralf Doblitz.
 
 0.04  Tue Jun 24 18:20:16 IST 2003
 	Add a netstring_read() function which reads a netstring from

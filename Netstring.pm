@@ -12,7 +12,7 @@ require Exporter;
 # Please submit bug reports, patches and comments to the author.
 # Latest information at http://romana.now.ie/
 #
-# $Id: Netstring.pm,v 1.9 2003/06/19 17:03:50 james Exp $
+# $Id: Netstring.pm,v 1.10 2004/08/19 09:21:14 james Exp $
 #
 # See the Text::Netstring man page that was installed with this module for
 # information on how to use the module.
@@ -24,7 +24,7 @@ require Exporter;
 	netstring_encode netstring_decode netstring_verify netstring_read
 );
 
-$VERSION = '0.04';
+$VERSION = '0.05';
 
 
 sub netstring_encode {
@@ -53,7 +53,7 @@ sub netstring_decode {
 	my @dec = map {
 
 		# should verify the netstring before using decode
-		if (/^\d+:(.*),/) {
+		if (/^\d+:(.*),/s) {
 			$1;
 		} else {
 			"";
@@ -73,7 +73,7 @@ sub netstring_verify {
 
 	my @ver = map {
 
-		/^(\d+):(.*),$/ and length($2) == $1;
+		/^(\d+):(.*),$/s and length($2) == $1;
 
 	} @_;
 
