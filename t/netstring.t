@@ -1,6 +1,6 @@
 # Before `make install' is performed this script should be runnable with
 # `make test'. After `make install' it should work as `perl test.pl'
-# $Id: netstring.t,v 1.2 2003/01/30 18:53:15 james Exp $
+# $Id: netstring.t,v 1.3 2003/02/01 21:26:37 james Exp $
 
 ######################### We start with some black magic to print on failure.
 
@@ -101,7 +101,7 @@ if ($string eq "") {
 # decode of  bing-bang-a-bang  should fail
 #
 $string = netstring_decode("bing-bang-a-bang");
-if (!defined($string)) {
+if (!$string) {
 	print "ok 7\n";
 } else {
 	print "not ok 7\n";

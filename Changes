@@ -1,5 +1,12 @@
 Revision history for Perl extension Text::Netstring.
-$Id: Changes,v 1.3 2003/01/30 20:16:50 james Exp $
+$Id: Changes,v 1.4 2003/02/01 21:36:18 james Exp $
+
+0.02  Sat Feb  1 21:31:07 GMT 2003
+	Add POD documentation for each function.
+	netstring_encode() and netstring_decode() return a different
+	 value for a list argument, if called in scalar or list context.
+	netstring_decode() returns "" instead of undef for decode
+	 failures.
 
 0.01  Thu Jan 30 20:06:10 2003
 	First release; netstring_encode(), netstring_decode() and

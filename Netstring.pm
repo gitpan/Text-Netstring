@@ -12,7 +12,7 @@ require Exporter;
 # Please submit bug reports, patches and comments to the author.
 # Latest information at http://romana.now.ie/
 #
-# $Id: Netstring.pm,v 1.4 2003/01/30 20:16:18 james Exp $
+# $Id: Netstring.pm,v 1.7 2003/02/01 21:30:34 james Exp $
 #
 # See the Text::Netstring man page that was installed with this module for
 # information on how to use the module.
@@ -24,7 +24,7 @@ require Exporter;
 	netstring_encode netstring_decode netstring_verify
 );
 
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 
 sub netstring_encode {
@@ -35,7 +35,7 @@ sub netstring_encode {
 
 	} @_;
 
-	wantarray ? @enc : $enc[0];
+	wantarray ? @enc : join("", @enc);
 }
 
 sub netstring_decode {
@@ -46,12 +46,12 @@ sub netstring_decode {
 		if (/^\d+:(.*),/) {
 			$1;
 		} else {
-			undef;
+			"";
 		}
 
 	} @_;
 
-	wantarray ? @dec : $dec[0];
+	wantarray ? @dec : join("", @dec);
 }
 
 sub netstring_verify {
@@ -71,7 +71,7 @@ __END__
 
 =head1 NAME
 
-Text::Netstring - Perl extension for manipulation of netstrings
+Text::Netstring - Perl module for manipulation of netstrings
 
 =head1 SYNOPSIS
 
@@ -79,9 +79,11 @@ Text::Netstring - Perl extension for manipulation of netstrings
 
  $ns = netstring_encode($text);
  @ns = netstring_encode(@text);
+ $ns = netstring_encode(@text);
 
  $text = netstring_decode($ns);
  @text = netstring_decode(@ns);
+ $text = netstring_decode(@ns);
 
  $valid = netstring_verify($string);
  @valid = netstring_verify(@string);
@@ -89,22 +91,34 @@ Text::Netstring - Perl extension for manipulation of netstrings
 =head1 DESCRIPTION
 
 This module is a collection of functions to make use of netstrings in
-your perl programs. A C<netstring> is a string encoding used by, at
+your perl programs. A I<netstring> is a string encoding used by, at
 least, QMTP and QMQP.
 
 =over 4
 
 =item netstring_encode()
 
-TBA
+Encode the supplied string, or list of strings, as a netstring.
+
+Supplying a scalar argument in a scalar context or list argument in list
+context does what you'd expect; encoding the scalar or each element of
+the list, as appropriate. Supplying a list argument in a scalar context,
+however, returns a single scalar which is the concatenation of each
+element of the list encoded as a netstring.
 
 =item netstring_decode()
 
-TBA
+Decode the supplied netstring, or list of netstrings, returning
+the I<interpretation> of each.
+
+The same context handling as for netstring_encode() applies.
 
 =item netstring_verify()
 
-TBA
+Check the validity of the supplied netstring, or list of netstrings.
+Returns a C<TRUE> or C<FALSE> value, or list of same, as appropriate.
+Supplying a list argument in a scalar context will return a value for
+the first element of the list only.
 
 =back
 
