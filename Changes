@@ -1,5 +1,8 @@
 Revision history for Perl extension Text::Netstring.
-$Id: Changes,v 1.9 2004/08/19 09:24:56 james Exp $
+$Id: Changes,v 1.10 2006/11/20 18:28:49 james Exp $
+
+0.07  Mon 20 Nov 2006 18:27:41 GMT
+	Correct a CVS revisioning mistake.
 
 0.06  Mon 20 Nov 2006 18:20:13 GMT
 	Small efficiency improvements and more `make test' tests.

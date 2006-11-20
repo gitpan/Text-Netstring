@@ -12,7 +12,7 @@ require Exporter;
 # Please submit bug reports, patches and comments to the author.
 # Latest information at http://romana.now.ie/
 #
-# $Id: Netstring.pm,v 1.12 2006/11/20 18:19:35 james Exp $
+# $Id: Netstring.pm,v 1.13 2006/11/20 18:28:49 james Exp $
 #
 # See the Text::Netstring man page that was installed with this module for
 # information on how to use the module.
@@ -24,7 +24,7 @@ require Exporter;
 	netstring_encode netstring_decode netstring_verify netstring_read
 );
 
-$VERSION = '0.06';
+$VERSION = '0.07';
 
 
 sub netstring_encode {
