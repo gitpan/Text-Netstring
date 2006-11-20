@@ -6,85 +6,52 @@ use vars qw($VERSION @ISA @EXPORT_OK);
 require Exporter;
 
 #
-# Copyright (c) 2003 James Raftery <james@now.ie>. All rights reserved.
+# Copyright (c) 2003-2006 James Raftery <james@now.ie>. All rights reserved.
 # This program is free software; you can redistribute it and/or
 # modify it under the same terms as Perl itself.
 # Please submit bug reports, patches and comments to the author.
 # Latest information at http://romana.now.ie/
 #
-# $Id: Netstring.pm,v 1.10 2004/08/19 09:21:14 james Exp $
+# $Id: Netstring.pm,v 1.12 2006/11/20 18:19:35 james Exp $
 #
 # See the Text::Netstring man page that was installed with this module for
 # information on how to use the module.
 #
 
 @ISA = qw(Exporter);
-# Items to export into callers namespace by request.
+# Items to export into caller's namespace by request.
 @EXPORT_OK = qw(
 	netstring_encode netstring_decode netstring_verify netstring_read
 );
 
-$VERSION = '0.05';
+$VERSION = '0.06';
 
 
 sub netstring_encode {
 
 	# is argument a list reference?
-	if (scalar @_ == 1 and ref $_[0] eq "ARRAY") {
-		@_ = @{ $_[0] };
-	}
+	@_ = @{$_[0]} if (scalar(@_)==1 and ref($_[0]) eq "ARRAY");
 
-	my @enc = map {
-
-		length($_) . ":" . $_ . ",";
-
-	} @_;
-
+	my @enc = map { length($_).":${_}," } @_;
 	wantarray ? @enc : join("", @enc);
 }
 
 sub netstring_decode {
 
 	# is argument a list reference?
-	if (scalar @_ == 1 and ref $_[0] eq "ARRAY") {
-		@_ = @{ $_[0] };
-	}
+	@_ = @{$_[0]} if (scalar(@_)==1 and ref($_[0]) eq "ARRAY");
 
-	my @dec = map {
-
-		# should verify the netstring before using decode
-		if (/^\d+:(.*),/s) {
-			$1;
-		} else {
-			"";
-		}
-
-	} @_;
-
+	my @dec = map { /^(\d+):(.*),$/s and length($2)==$1 ? $2 : "" } @_;
 	wantarray ? @dec : join("", @dec);
 }
 
 sub netstring_verify {
 
 	# is argument a list reference?
-	if (scalar @_ == 1 and ref $_[0] eq "ARRAY") {
-		@_ = @{ $_[0] };
-	}
+	@_ = @{$_[0]} if (scalar(@_)== 1 and ref($_[0]) eq "ARRAY");
 
-	my @ver = map {
-
-		/^(\d+):(.*),$/s and length($2) == $1;
-
-	} @_;
-
-	my $overall = 1;	# initially true
-
-	foreach (@ver) {
-		# will remain true iff every element of @ver is true
-		$overall = $overall && $_;
-	}
-
-	wantarray ? @ver : $overall;
+	my @ver = map { /^(\d+):(.*),$/s and length($2)==$1 } @_;
+	wantarray ? @ver : do { my $i=shift(@ver); foreach (@ver) {$i &&= $_}; $i };
 }
 
 sub netstring_read {
@@ -163,9 +130,9 @@ least, the QMTP and QMQP email protocols.
 Encode the argument string, list of strings, or referenced list of
 strings as a netstring.
 
-Supplying a scalar argument in a scalar context or list or list
-reference argument in list context does what you'd expect; encoding the
-scalar or each element of the list, as appropriate. Supplying a list or
+Supplying a scalar argument in a scalar context, or a list or list
+reference argument in list context, does what you'd expect; encoding the
+scalar or each element of the list as appropriate. Supplying a list or
 list reference argument in a scalar context, however, returns a single
 scalar which is the concatenation of each element of the list encoded as
 a netstring.
@@ -173,7 +140,9 @@ a netstring.
 =item netstring_decode()
 
 Decode the argument netstring, list of netstrings, or referenced list of
-netstrings returning the I<interpretation> of each.
+netstrings returning the I<interpretation> of each. You should use 
+C<netstring_verify()> over any data before you try to decode it. An
+invalid netstring will be returned as an empty string.
 
 The same scalar/list context handling as for netstring_encode() applies.
 
@@ -216,6 +185,12 @@ C<whizzbang> is the value of C<$t>
 =head1 NOTES
 
 The format of a netstring is described in http://cr.yp.to/proto/qmtp.txt
+
+=head1 LICENSE
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself. (Being a speaker of British english,
+I'd call it a "licence" though)
 
 =head1 AUTHOR
 
